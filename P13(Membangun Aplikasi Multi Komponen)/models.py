@@ -6,7 +6,6 @@ from typing import List
 class Product:
     id: str
     name: str
-    price: str
     price: float
     
 @dataclass
