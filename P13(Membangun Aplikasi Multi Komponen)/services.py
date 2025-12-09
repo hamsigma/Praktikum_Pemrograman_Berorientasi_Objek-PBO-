@@ -37,3 +37,12 @@ class ShoppingCart:
     @property
     def total_price(self) -> float:
         return sum(item.subtotal for item in self._items.values())
+    
+# --- IMPLEMENTASI PEMBAYARAN KARTU DEBIT (CHALLENGE) ---
+class DebitCardPayment(IPaymentProcessor):
+    def process(self, amount: float) -> bool:
+        LOGGER.info(f"Menggesek Kartu Debit...")
+        LOGGER.info(f"Authorizing payment of Rp{amount:,.0f} via Bank Network...")
+        # Simulasi validasi bank (selalu berhasil untuk demo)
+        LOGGER.info("Pembayaran Debit DITERIMA.")
+        return True
