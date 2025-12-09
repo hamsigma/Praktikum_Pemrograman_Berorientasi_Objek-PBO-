@@ -1,8 +1,9 @@
 # main_app.py
 import logging
 from repositories import ProductRepository
-from services import IPaymentProcessor, ShoppingCart, CashPayment
-from models import Product # Diperlukan untuk type hint di _handle_add_item
+# PENTING: Import DebitCardPayment di sini
+from services import IPaymentProcessor, ShoppingCart, CashPayment, DebitCardPayment
+from models import Product 
 
 LOGGER = logging.getLogger('MAIN_APP')
 
@@ -46,6 +47,7 @@ class PosApp:
 
         LOGGER.info(f"\nTotal Belanja: Rp{total:,.0f}")
 
+        # Polymorphism in action: PosApp tidak peduli apakah ini Cash atau Debit
         success = self.payment_processor.process(total)
 
         if success:
@@ -71,10 +73,12 @@ if __name__ == "__main__":
     # 1. Instantiate Lapisan Data
     repo = ProductRepository()
 
-    # 2. Instantiate Service (Implementasi Konkret)
-    payment_method = CashPayment()
+    # 2. Instantiate Service (GANTI IMPLEMENTASI DI SINI)
+    # payment_method = CashPayment()       # <-- Implementasi lama (Tunai)
+    payment_method = DebitCardPayment()    # <-- Implementasi baru (Debit) 
 
     # 3. Inject Dependencies ke Aplikasi Utama
+    # PosApp menerima 'payment_method' baru tanpa perlu diubah kodenya.
     app = PosApp(repository=repo, payment_processor=payment_method)
 
     # Tambahkan loop CLI sederhana untuk interaksi
@@ -82,7 +86,7 @@ if __name__ == "__main__":
         print("\nMenu:")
         print("1. Tampilkan Produk")
         print("2. Tambah ke Keranjang")
-        print("3. Checkout")
+        print("3. Checkout (Sekarang menggunakan Debit)")
         print("4. Keluar")
         choice = input("Pilih opsi (1-4): ")
 
@@ -97,4 +101,3 @@ if __name__ == "__main__":
             break
         else:
             LOGGER.warning("Pilihan tidak valid.")
-            
