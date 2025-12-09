@@ -45,4 +45,4 @@ class DebitCardPayment(IPaymentProcessor):
         LOGGER.info(f"Authorizing payment of Rp{amount:,.0f} via Bank Network...")
         # Simulasi validasi bank (selalu berhasil untuk demo)
         LOGGER.info("Pembayaran Debit DITERIMA.")
-        return True
+        return True 
